@@ -19,10 +19,11 @@ const weatherIcons = {
   "11d": "🌩️", //	thunderstorm
   "13d": "❄️", //	snow
   "50d": "", //
-};
-const processedData = data.list.map((day) => {
+} as Record<string, string>;
+
+const processedData = data.list.map((day: Day) => {
   return {
-    date: day.dy,
+    date: day.dt,
     temp: day.temp.day,
     tempRange: [day.temp.min, day.temp.max],
     feelsLike: day.feels_like.day,
@@ -34,44 +35,41 @@ const processedData = data.list.map((day) => {
     windDirection: day.deg,
     clouds: day.clouds,
     windGust: day.gust,
-    icon: weatherIcons[day.weather[0].icon],
+    icon: weatherIcons[day.weather[0].icon] || "",
   };
 });
 
-await writeJSON(`${filename}.processed.json`, processedData);
+await writeJSON(`${filename}-processed.json`, processedData);
 
-// basic structure
-// {
-//   "dt":1568977200,
-//   "sunrise":1568958164,
-//   "sunset":1569002733,
-//   "temp":{
-//      "day":293.79,
-//      "min":288.85,
-//      "max":294.47,
-//      "night":288.85,
-//      "eve":290.44,
-//      "morn":293.79
-//   },
-//   "feels_like":{
-//      "day":278.87,
-//      "night":282.73,
-//      "eve":281.92,
-//      "morn":278.87
-//   },
-//   "pressure":1025.04,
-//   "humidity":42,
-//   "weather":[
-//      {
-//         "id":800,
-//         "main":"Clear",
-//         "description":"sky is clear",
-//         "icon":"01d"
-//      }
-//   ],
-//   "speed":4.66,
-//   "deg":102,
-//   "gust": 5.3,
-//   "clouds":0,
-//   "pop":0.24
-// },
+type Day = {
+  dt: number;
+  temp: {
+    day: number;
+    min: number;
+    max: number;
+    night: number;
+    eve: number;
+    morn: number;
+  };
+  feels_like: {
+    day: number;
+    night: number;
+    eve: number;
+    morn: number;
+  };
+  pressure: number;
+  humidity: number;
+  weather: {
+    id: number;
+    main: string;
+    description: string;
+    icon: string;
+  }[];
+  speed: number;
+  deg: number;
+  clouds: number;
+  pop: number;
+  gust: number;
+  sunrise: number;
+  sunset: number;
+};
