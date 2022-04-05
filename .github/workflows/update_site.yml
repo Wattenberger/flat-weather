@@ -1,0 +1,16 @@
+name: data
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - ./data-processed.json
+jobs:
+  scheduled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: npm install & deploy
+        run: |
+          yarn install
+          yarn build
