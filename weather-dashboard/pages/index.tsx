@@ -22,18 +22,17 @@ interface WeatherDatum {
 
 function WindspeedIcon() {
   return (
-    <svg x="0px" y="0px" viewBox="0 0 42 42">
-      <polygon
-        fill="black"
-        points="27,37.5 42,20 27,4.5 18,4.5 30,16.5 0,16.5 0,23.5 30,23.5 18,37.5 "
-      />
+    <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline>
     </svg>
   )
 }
 
+const maxWindSpeed = 6
 const Home: NextPage = () => {
   const weatherData = data as WeatherDatum[]
-  console.log(weatherData)
+  const minTemp = Math.min(...weatherData.map(d => d.min))
+  const maxTemp = Math.max(...weatherData.map(d => d.max))
 
   return (
     <>
@@ -47,28 +46,35 @@ const Home: NextPage = () => {
             {weatherData.map((datum) => {
               const parsedDate = format(
                 new Date(datum.date * 1000),
-                'dd/MM/yyyy'
+                'EEE MMMM d, yyyy'
               )
               return (
                 <li className="py-8">
                   <div className="flex items-center justify-between">
-                    <p>{parsedDate}</p>
+                    <p className="w-60">{parsedDate}</p>
                     <p className="text-3xl">{datum.icon}</p>
-                    <div className="flex items-center gap-1">
-                      <span className="text-xl font-medium">{datum.max}°</span>
-                      <span>/</span>
-                      <span className="opacity-100">{datum.min}°</span>
+                    <div className="relative w-32 text-center">
+                      <span className="text-xl font-medium">{datum.temp}</span><span className="text-xl font-light text-slate-500">°C</span>
+                      <div className="w-full absolute -bottom-3 bg-slate-300 h-1 rounded-full transform translate-y-1/2" style={{
+                        left: `${(datum.min - minTemp) / (maxTemp - minTemp) * 100}%`,
+                        width: `${(datum.max - datum.min) / (maxTemp - minTemp) * 100}%`,
+                      }}>
+                      </div>
+                      <div className="absolute -bottom-3 h-3 w-3 border-white border-2 rounded-full bg-indigo-500 z-10 transform translate-y-1/2 -translate-x-1/2" style={{
+                        left: `${(datum.temp - minTemp) / (maxTemp - minTemp) * 100}%`,
+                      }}></div>
                     </div>
                     <div className="flex items-center gap-2">
                       <div
-                        className="h-6 w-6 transform"
+                        className="h-6 w-6 transform text-slate-900"
                         style={{
+                          opacity: datum.windSpeed / maxWindSpeed,
                           transform: `rotate(${datum.windDirection}deg)`,
                         }}
                       >
                         <WindspeedIcon />
                       </div>
-                      <p>{datum.windSpeed} km/h</p>
+                      <p className="font-mono">{datum.windSpeed} km/h</p>
                     </div>
                   </div>
                 </li>
