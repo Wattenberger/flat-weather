@@ -1,4 +1,4 @@
-name: data
+name: update-site
 on:
   workflow_dispatch: {}
   push:
@@ -11,6 +11,7 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
       - name: npm install & deploy
+        working-directory: ./weather-dashboard
         run: |
           yarn install
           yarn build
