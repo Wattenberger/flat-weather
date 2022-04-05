@@ -24,22 +24,23 @@ const weatherIcons = {
 const processedData = data.list.map((day: Day) => {
   return {
     date: day.dt,
+    icon: weatherIcons[day.weather[0].icon] || "",
     temp: day.temp.day,
-    tempRange: [day.temp.min, day.temp.max],
+    min: day.temp.min,
+    max: day.temp.max,
     feelsLike: day.feels_like.day,
-    sunrise: day.sunrise,
-    sunset: day.sunset,
     pressure: day.pressure,
     humidity: day.humidity,
     windSpeed: day.speed,
     windDirection: day.deg,
     clouds: day.clouds,
     windGust: day.gust,
-    icon: weatherIcons[day.weather[0].icon] || "",
+    sunrise: day.sunrise,
+    sunset: day.sunset,
   };
 });
 
-await writeJSON(`${filename}-processed.json`, processedData);
+await writeJSON(`data-processed.json`, processedData);
 
 type Day = {
   dt: number;
