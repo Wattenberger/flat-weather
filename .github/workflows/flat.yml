@@ -23,4 +23,4 @@ jobs:
           http_url: https://api.openweathermap.org/data/2.5/forecast/daily?lat=-0.1635658&lon=50.8516621&cnt=16&appid=${{ secrets.APIKEY }}
           postprocess: ./process-weather.ts
           downloaded_filename: data.json
-          mask: '["${{ secrets.APIKEY }}"]
+          mask: '["${{ secrets.APIKEY }}"]'
