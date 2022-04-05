@@ -20,9 +20,7 @@ jobs:
       - name: Fetch data
         uses: githubocto/flat@v3
         with:
-          http_url:
-            https://api.openweathermap.org/data/2.5/forecast/daily?units=metric&lat=-0.1635658&lon=50.8516621&cnt=16&appid=${{
-            secrets.APIKEY }}
+          http_url: https://api.openweathermap.org/data/2.5/forecast/daily?units=metric&lat=-0.1635658&lon=50.8516621&cnt=16&appid=${{ secrets.APIKEY }}
           postprocess: ./process-weather.ts
           downloaded_filename: data.json
           mask: '["${{ secrets.APIKEY }}"]'
